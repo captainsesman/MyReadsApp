@@ -3,15 +3,16 @@ import SingleBook from './SingleBook';
 
 
 class BooksList extends Component {
+    
 
     filterBooksByShelf =  (allbooks, shelf)=> allbooks.filter((c) => {            
             return c.shelf === shelf;
         })
     
-
-
     render() {
         const { allbooks } = this.props;
+        
+
         let setOfShelfCat = new Set()
         const shelfCategories = allbooks.map(cate => {
             setOfShelfCat.add(cate.shelf);
@@ -37,7 +38,7 @@ class BooksList extends Component {
                                      <ol className="books-grid">
                                       {
                                 this.filterBooksByShelf(allbooks, shelf).map(book => (                                          
-                                    <SingleBook  book={book} key={book.id}/>
+                                    <SingleBook  book={book} key={book.id} onUpdateBook={this.props.onUpdateBook }/>
                                        ))                       
                                        }
                                       </ol>
