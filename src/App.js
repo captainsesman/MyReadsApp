@@ -2,7 +2,7 @@ import React from 'react'
 // import * as BooksAPI from './BooksAPI'
 import './App.css'
 import * as BooksApi from './BooksAPI'
-import BooksList from './BooksList'
+import BooksList from './BooksOnShelf'
 import { Route } from 'react-router';
 import SearchBook from './SearchBook';
 
@@ -62,7 +62,7 @@ class BooksApp extends React.Component {
         <Route path='/search' render={({history}) => (<SearchBook allbooks={this.state.books}
           onUpdateBook={(book, shelf) => {
             this.ChangeBookShelf(book, shelf)
-            history.push('/')
+            history.push('/search')
           }}
         
         />)}>
