@@ -2,6 +2,8 @@ import React, { Component } from "react"
 import { Link } from "react-router-dom";
 import SingleBook from "./SingleBook";
 import * as BooksApi from './BooksAPI'
+import { debounce } from 'lodash';
+import PropTypes from 'prop-types'
 
 
 class SearchBook extends Component {
@@ -9,7 +11,7 @@ class SearchBook extends Component {
     books: [],
     query: '',
   }
-  updateSearch = (query) => {
+  updateSearch = debounce((query) => {
     this.setState(() => ({
       query: query
     }))
@@ -25,11 +27,11 @@ class SearchBook extends Component {
       console.log(err)
     })
 
-  }
+  },1000)
   render() {
     let query = this.state.query;
     const showingBooks = this.state.books;
-
+    const booksOnCurrentShelf = this.props.allbooks   
     return (
       <div className="search-books">
         <div className="search-books-bar">
@@ -43,15 +45,19 @@ class SearchBook extends Component {
                           However, remember that the BooksAPI.search method DOES search by title or author. So, don't worry if
                           you don't find a specific author or title. Every search is limited by search terms.
                         */}
-            <input type="text" value={query} onChange={(event) => this.updateSearch(event.target.value)} placeholder="Search by title or author" />
+            <input type="text"  onChange={(event) => this.updateSearch(event.target.value)} placeholder="Search by title or author" />
 
           </div>
         </div>
         <div className="search-books-results">
           <ol className="books-grid">
-            {
-              showingBooks.map((c) => (<SingleBook book={c} key={c.id} onUpdateBook={this.props.onUpdateBook} />))
-            }
+            {showingBooks !== null ? showingBooks.map((c) => {
+             const booksOnShelf = booksOnCurrentShelf.find(
+               ({id} ) => c.id === id  );
+             c.shelf  = booksOnShelf ? booksOnShelf.shelf:'none'
+
+                return(<SingleBook book={c} key={c.id}  onUpdateBook={this.props.onUpdateBook}/>)
+              }):null   }
 
           </ol>
         </div>
@@ -62,6 +68,13 @@ class SearchBook extends Component {
 
 
 
+
+
 }
+  SearchBook.propTypes = {
+    book: PropTypes.array.isRequired,
+    onUpdateBook: PropTypes.func.isRequired,
+    updateSearch:PropTypes.func.isRequired
+  }
 
 export default SearchBook;

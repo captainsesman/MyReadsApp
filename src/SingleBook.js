@@ -22,7 +22,7 @@ class SingleBook extends Component {
                     <div className="book-top">
                         <div className="book-cover" style={{ width: 128, height: 193, backgroundImage: book.imageLinks != null ? `url(${book.imageLinks.smallThumbnail})` : null }}></div>
                         <div className="book-shelf-changer">
-                            <select defaultValue={book.shelf} onChange={this.handleChangeBookShelf}>
+                            <select defaultValue={book.shelf? book.shelf : 'none'} onChange={this.handleChangeBookShelf}>
                                 <option value="move" disabled>Move to...</option>
                                 <option value="currentlyReading">Currently Reading </option>
                                 <option value="wantToRead">Want to Read</option>
@@ -32,7 +32,7 @@ class SingleBook extends Component {
                         </div>
                     </div>
                     <div className="book-title">{book.title}</div>
-                    <div className="book-authors">{book.authors}</div>
+                    <div className="book-authors">{ book.authors && book.authors.join(', ')}</div>
                 </div>
             </li>
         )

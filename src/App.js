@@ -5,6 +5,7 @@ import * as BooksApi from './BooksAPI'
 import BooksList from './BooksOnShelf'
 import { Route } from 'react-router';
 import SearchBook from './SearchBook';
+import { Link } from "react-router-dom";
 
 class BooksApp extends React.Component {
   state = {
@@ -16,10 +17,11 @@ class BooksApp extends React.Component {
      * users can use the browser's back and forward buttons to navigate between
      * pages, as well as provide a good URL they can bookmark and share.
      */
-    //showSearchPage: false
+    showSearchPage: false
+    
   }
-  componentDidMount() {
-    BooksApi.getAll().then((books) => {
+  async componentDidMount() {
+    const books = await BooksApi.getAll().then((books) => {
       this.setState(() => ({
         books
          
@@ -28,10 +30,8 @@ class BooksApp extends React.Component {
      
     
   }
-  ChangeBookShelf = (book, shelf) => {
-
-
-    BooksApi.update(book, shelf).then
+  ChangeBookShelf = async (book, shelf) => {
+    await BooksApi.update(book, shelf).then
       (this.setState((currentState) => ({
         books: currentState.books.filter((c) => {
           if (c.id === book.id) {
@@ -42,7 +42,7 @@ class BooksApp extends React.Component {
         })
       })))
     
-      BooksApi.getAll().then((books) => ( this.setState(() =>( { books: books })) ))
+      await BooksApi.getAll().then((books) => ( this.setState(() =>( { books: books })) ))
     
   }
  
@@ -70,7 +70,9 @@ class BooksApp extends React.Component {
         
       
           
-          
+           <div className="open-search">
+                <Link to="/search"><button onClick={() => this.setState({ showSearchPage: true })}>Add a book</button></Link>
+           </div>
       </div>
      
       
